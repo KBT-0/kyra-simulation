@@ -3,7 +3,7 @@
 **Kyra** is an experimental terminal-based artificial life simulation.  
 It's a simple ASCII world where digital organisms try to survive, replicate, and die with meaning. Or at least with color.
 
-![Simulation Preview](screenshots/kyra-grid-01.png)
+![Simulation Preview](screenshots/InGame_2.png)
 
 ---
 
@@ -30,13 +30,12 @@ This is an early-stage project—Kyra is still learning to crawl. It doesn’t a
 
 | Simulation | Log View | Lineage Tree |
 |------------|-----------|---------------|
-| ![Grid](screenshots/kyra-grid-01.png) | ![Logs](screenshots/kyra-logs.png) | ![Tree](screenshots/kyra-tree.png) |
+| ![Grid](screenshots/InGame_1.png) | ![Logs](screenshots/Log_Window.png) | ![Tree](screenshots/Proto_Tree.png) |
 
 ---
 
 ## 📦 Run It
 
-bash
 dotnet run
 
 ---
