@@ -15,6 +15,36 @@ This is an early-stage project—Kyra is still learning to crawl. It doesn’t a
 
 ---
 
+## 📜 Rules of Kyra Life
+
+Kyra's world runs on a few simple rules. No gods, no kings—just instincts and if-statements.
+
+1. **Consume to Exist.**  
+   Kyras must stand on an energy cell to consume it. No remote dining. If there’s fuel, they slurp it. If not, they starve.
+
+2. **You Move, You Pay.**  
+   Every step costs 1 energy. Motion is taxation. Standing still is free (but not advised).
+
+3. **Replicate When Strong.**  
+   With enough energy (≥ 25), a Kyra tries to clone itself into an adjacent empty tile. Reproduction is their only career goal.
+
+4. **Death Is Energy Redistribution.**  
+   When a Kyra dies, it leaves behind all the energy it ever collected. It's poetic, if you’re into tragic minimalism.
+
+5. **Loot Thy Ancestors.**  
+   Living Kyras can absorb energy from neighboring tombs. Yes, grave-robbing is both allowed and encouraged. This is survival.
+
+6. **You Shall Not Step on a Tomb.**  
+   Mezarlar kutsal. Kyras cannot walk on tombs. It’s tradition, code, and good manners.
+
+7. **No Diagonal Shenanigans.**  
+   All movement and interaction is strictly up/down/left/right. This isn’t a tactical RPG.
+
+8. **Energy Is Life.**  
+   No energy? No Kyra. They don’t cry, they just stop existing.
+
+---
+
 ## ✨ Features (so far)
 
 - Simple AI: Kyras move, replicate, and perish based on energy

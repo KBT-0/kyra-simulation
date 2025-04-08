@@ -29,7 +29,7 @@ namespace KyraSimulation
             StartLogWindow();
             InitializeGrid(rand);
 
-            for(int i = 0; i < Constants.StarterKyraCount; i++)
+            for(int i = 0; i <= Constants.StarterKyraCount; i++)
                 SpawnStarterKyra(rand);
 
             bool allDeadOnce = false;
@@ -136,7 +136,7 @@ namespace KyraSimulation
                 {
                     var cell = grid[y, x];
 
-                    if(cell.Type == Constants.DeadProtoCell && cell.energy > 0)
+                    if(cell is {Type: Constants.DeadProtoCell, Energy: > 0})
                         Console.ForegroundColor = ConsoleColor.DarkMagenta;
                     else if(cell.Type == Constants.DeadProtoCell)
                         Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -208,8 +208,7 @@ namespace KyraSimulation
     {
         public char Type = '.';
         public string Id = "";
-        public string TombId = "";
-        public int energy = 3;
+        public int Energy = 3;
     }
 
     public class Kyra
@@ -218,8 +217,9 @@ namespace KyraSimulation
         public string ParentId;
         public int X, Y;
         public int Energy = 20;
-        public int TotalCollectedEnergy = 0;
         public bool Alive = true;
+
+        private int totalCollectedEnergy = 0;
 
         public void Act(Cell[,] grid, List<Kyra> protos, Random rand)
         {
@@ -227,11 +227,10 @@ namespace KyraSimulation
             if(Energy <= 0)
             {
                 Alive = false;
-                Program.LogEvent($"{Id} died. Left {TotalCollectedEnergy} energy in tomb.");
+                Program.LogEvent($"{Id} died. Left {totalCollectedEnergy} energy in tomb.");
                 grid[Y, X].Type = Constants.DeadProtoCell;
-                grid[Y, X].TombId = Id;
                 grid[Y, X].Id = Id;
-                grid[Y, X].energy = TotalCollectedEnergy;
+                grid[Y, X].Energy = totalCollectedEnergy;
                 return;
             }
 
@@ -276,20 +275,42 @@ namespace KyraSimulation
 
         private void TryConsumeEnergy(Cell[,] grid)
         {
+            #region Consume Energy Cell
+
             var target = grid[X, Y];
 
-            if(target.Type != Constants.EmptyCell && target.energy > 0)
+            if(target.Type == Constants.EnergyCell)
             {
-                if(target.Type == Constants.DeadProtoCell)
-                    Program.LogEvent($"{Id} looted {target.energy} energy from tomb of {target.TombId}.");
-                
-                Energy += target.energy;
-                TotalCollectedEnergy += target.energy;
-                target.energy = 0;
+                Energy += target.Energy;
+                totalCollectedEnergy += target.Energy;
+                target.Energy = 0;
+                target.Type = Constants.EmptyCell;
             }
 
-            if(target.Type == Constants.EnergyCell)
-                target.Type = Constants.EmptyCell;
+            #endregion
+            
+            #region Consume Dead Proto Cell
+
+            var dx = new[] {0, 0, -1, 1};
+            var dy = new[] {-1, 1, 0, 0};
+
+            for(int i = 0; i < 4; i++)
+            {
+                int nx = X + dx[i];
+                int ny = Y + dy[i];
+                if(nx is >= 0 and < Constants.GridSize && ny is >= 0 and < Constants.GridSize)
+                {
+                    var deadProto = grid[ny, nx];
+                    if(deadProto is not {Type: Constants.DeadProtoCell, Energy: > 0}) continue;
+                    
+                    Program.LogEvent($"{Id} looted {deadProto.Energy} energy from tomb of {deadProto.Id}.");
+                    Energy += deadProto.Energy;
+                    deadProto.Energy = 0;
+                    break;
+                }
+            }
+
+            #endregion
         }
 
         private void TryMove(Cell[,] grid, Random rand)
@@ -305,10 +326,7 @@ namespace KyraSimulation
             {
                 var target = grid[ny, nx];
 
-                bool canMove =
-                    target.Type == Constants.EmptyCell ||
-                    target.Type == Constants.EnergyCell ||
-                    (target.Type == Constants.DeadProtoCell && target.energy > 0);
+                bool canMove = target.Type != Constants.DeadProtoCell;
 
                 if(canMove)
                 {
